@@ -2,6 +2,7 @@
 #include<iostream>
 #include "Comparator.h"
 #include "node.h"
+#include<queue>
 using namespace std;
 
 template<typename T, typename Comparator> class multiset
@@ -11,20 +12,21 @@ template<typename T, typename Comparator> class multiset
 	Comparator comp;
 protected:
 	//metode ce ma vor ajuta la realizarea insertiei si deletiei
-	T maxim(T, T);
-	node<T>* rotateRight(node<T>*);
-	node<T>* rotateLeft(node<T>*);
-	int getBalance(node<T>*);
-	node<T>* valMinNod(node<T>*);
+	T maxim(T, T);	//facut
+	node<T>* rotateRight(node<T>*);	//facut
+	node<T>* rotateLeft(node<T>*);	//facut
+	int getBalance(node<T>*);	//facut	
+	node<T>* valMinNod(node<T>*);	//facut
+
 public:
-	multiset();
+	multiset();	//facut
 	multiset(multiset&);
 	~multiset();
 	node<T> getRoot() const { return this->root; }
 	int getNoOfNodes() const { return this->noOfNodes; }
-	void inserare(node<T>*, T);
-	T stergePrima(node<T>*, T);
-	int noOfAparitions(T);
+	void inserare(node<T>*, T);	//facut?
+	T stergePrima(node<T>*, T);	//facut?
+	int noOfAparitions(T);	//facut
 	bool exista(T);
 	void stergereToate(T);
 	int distincte();
@@ -207,5 +209,33 @@ inline T multiset<T, Comparator>::stergePrima(node<T>* root, T key)
 	//daca nu era dezechilibru returnam direct radacina
 	return root;
 
+}
+
+template<typename T, typename Comparator>
+inline int multiset<T, Comparator>::noOfAparitions(T findKey)
+{
+	if (root == NULL)
+		return 0;
+	int nrAparitii = 0;
+	queue<node<T>*> coada;
+	coada.push(root);
+	while (!coada.empty());
+	{
+		if (comp(coada.front()->key, findKey) == 0)
+			nrAparitii++;
+		coada.push(coada.front()->left);
+		coada.push(coada.front()->right);
+		coada.pop();
+	}
+	return nrAparitii;
+}
+
+template<typename T, typename Comparator>
+inline bool multiset<T, Comparator>::exista(T findKey)
+{
+	int nrAparitii = noOfAparitions(findKey);
+	if (nrAparitii)
+		return true;
+	return false;
 }
 
