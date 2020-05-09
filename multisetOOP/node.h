@@ -8,10 +8,10 @@ template<typename T> class node
 {
 	T key;
 	node* left, * right;
-	int height; //inaltimea arborelui pana la nodul curent
+	int height, aparitions; //inaltimea arborelui pana la nodul curent
 public:
 	node() : left(NULL), right(NULL), height(0) {}
-	node(T key): key(key), left(NULL), right(NULL), height(0) {}
+	node(T key): key(key), left(NULL), right(NULL), height(0), aparitions(1) {}
 	int getHeight(node* nod)
 	{
 		if (nod == NULL)

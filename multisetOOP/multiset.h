@@ -2,7 +2,7 @@
 #include<iostream>
 #include "Comparator.h"
 #include "node.h"
-#include<queue>
+#include<vector>
 using namespace std;
 
 template<typename T, typename Comparator> class multiset
@@ -25,8 +25,8 @@ public:
 	node<T> getRoot() const { return this->root; }
 	int getNoOfNodes() const { return this->noOfNodes; }
 	void inserare(node<T>*, T);	//facut?
-	T stergePrima(node<T>*, T);	//facut?
-	int noOfAparitions(T);	//facut
+	node<T>* stergePrima(node<T>*, T);	//facut?
+	int noOfAparitions(node<T>*, T);	//facut
 	bool exista(T);
 	void stergereToate(T);
 	int distincte();
@@ -41,13 +41,30 @@ multiset<T, Comparator>::multiset() { root = NULL; noOfNodes = 0; }
 template<class T, class Comparator>
 multiset<T, Comparator>::multiset(multiset& M)
 {
+	if (noOfNodes > 0)
+		~multiset();
+	vector<node<T>*> coada;
+	coada.push_back(M.root);
+	while (coada.size > 0)
+	{
+		coada.push_back(coada[0]->left);
+		coada.push_back(coada[0]->right);
+		int i = 0;
+		while (i < *coada[0]->aparitions)
+		{
+			this->root = this->inserare(root, coada[0]->key);
+			i++;
+		}
+		coada.erase(coada.begin());
+	}
 
 }
 //destructor
 template<typename T, typename Comparator>
 multiset<T, Comparator>::~multiset()
 {
-
+	while (noOfNodes)
+		root = stergereToate(root->key);
 }
 
 //functii auxiliare pentru a realiza insertia si deletia
@@ -109,10 +126,11 @@ inline void multiset<T, Comparator>::inserare(node<T>* nod, T newKey)
 		node<T>* newNode(newKey);
 		return newNode;
 	}
-	if (comp(newKey, nod->key) <= 0)
+	if (comp(newKey, nod->key) < 0)
 		nod->left = inserare(nod->left, newKey);
 	else if (comp(newKey, nod->key) > 0)
 		nod->right = inserare(nod->right, newKey);
+	else nod->aparitions++;
 	this->noOfNodes++;
 	//verificam daca cumva arborele nu mai este echilibrat si verificam care dintre cele 4 cazuri de dezechilibru sunt
 	int balance = getBalance(nod);
@@ -145,10 +163,10 @@ inline void multiset<T, Comparator>::inserare(node<T>* nod, T newKey)
 }
 
 template<typename T, typename Comparator>
-inline T multiset<T, Comparator>::stergePrima(node<T>* root, T key)
+inline node<T>* multiset<T, Comparator>::stergePrima(node<T>* root, T key)
 {
 	if (this->root == NULL)
-		return;
+		return root;
 	//initial verificam subarborele stang
 	if (key < root->key)
 		root->left = stergePrima(root->left, key);
@@ -156,30 +174,34 @@ inline T multiset<T, Comparator>::stergePrima(node<T>* root, T key)
 		root->right = stergePrima(root->right, key);
 	else
 	{
-		if (root->left == NULL || root->right == NULL)
+		root->aparitions--;
+		if (root->aparitions == 0)
 		{
-			node<T>* aux;
-			if (root->left = NULL)
-				aux = root->left;
-			else aux = root->right;
-			if (aux == NULL)
+			if (root->left == NULL || root->right == NULL)
 			{
-				aux = root;
-				root = NULL;
-			}
-			else *root = *aux;
+				node<T>* aux;
+				if (root->left = NULL)
+					aux = root->left;
+				else aux = root->right;
+				if (aux == NULL)
+				{
+					aux = root;
+					root = NULL;
+				}
+				else *root = *aux;
 
-			delete aux;
-		}
-		else
-		{
-			node* aux = valMinNod(root->right);
-			root->key = aux->key;
-			root->right = stergePrima(root->right, aux->key);
+				delete aux;
+			}
+			else
+			{
+				node* aux = valMinNod(root->right);
+				root->key = aux->key;
+				root->right = stergePrima(root->right, aux->key);
+			}
 		}
 	}
 	if (root == NULL)
-		return root->key;
+		return root;
 	root->height = 1 + maxim(root->left->getHeight(), root->right->getHeight());
 	//dupa stergere exista riscul de a deveni dezechilibrat
 	int balance = getBalance(root);
@@ -208,26 +230,19 @@ inline T multiset<T, Comparator>::stergePrima(node<T>* root, T key)
 	}
 	//daca nu era dezechilibru returnam direct radacina
 	return root;
-
+	noOfNodes--;
 }
 
 template<typename T, typename Comparator>
-inline int multiset<T, Comparator>::noOfAparitions(T findKey)
+inline int multiset<T, Comparator>::noOfAparitions(node<T>* root, T findKey)
 {
 	if (root == NULL)
 		return 0;
-	int nrAparitii = 0;
-	queue<node<T>*> coada;
-	coada.push(root);
-	while (!coada.empty());
-	{
-		if (comp(coada.front()->key, findKey) == 0)
-			nrAparitii++;
-		coada.push(coada.front()->left);
-		coada.push(coada.front()->right);
-		coada.pop();
-	}
-	return nrAparitii;
+	if (comp(root->key, findKey) == 0)
+		return root->aparitions;
+	else if (comp(root->key, findKey) < 0)
+		return noOfAparitions(root->left, findKey);
+	else return noOfAparitions(root->right, findKey);
 }
 
 template<typename T, typename Comparator>
@@ -237,5 +252,12 @@ inline bool multiset<T, Comparator>::exista(T findKey)
 	if (nrAparitii)
 		return true;
 	return false;
+}
+
+template<typename T, typename Comparator>
+inline void multiset<T, Comparator>::stergereToate(T deleteKey)
+{
+	while (noOfAparitions(this->root, deleteKey))
+		this->root=stergePrima(this->root, deleteKey);
 }
 
