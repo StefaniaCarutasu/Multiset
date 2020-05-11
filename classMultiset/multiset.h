@@ -34,6 +34,21 @@ public:
 	friend ostream& operator << <>(ostream&, multiset<T, Comparator>&);
 
 };
+//testare exceptii:
+class multisetVid : public exception
+{
+	const char* what() const throw ()
+	{
+		return "Multisetul este vid";
+	}
+};
+class nuExista : public exception
+{
+	const char* what() const throw ()
+	{
+		return "Nu exista aceasta cheie in multiset";
+	}
+};
 
 //constructor fara parametrii: initializeaza un multiset gol
 template<typename T, typename Comparator>
@@ -114,7 +129,7 @@ template<typename T, typename Comparator>
 inline node<T>* multiset<T, Comparator>::valMinNod(node<T>* nod)
 {
 	node<T>* nodCurent = nod;
-	while (nodCurent->left != NULL)
+	while (nodCurent && nodCurent->left != NULL)
 		nodCurent = nodCurent->left;
 	return nodCurent;
 }
@@ -179,7 +194,9 @@ inline node<T>* multiset<T, Comparator>::inserare(node<T>* root, T newKey)
 template<typename T, typename Comparator>
 inline node<T>* multiset<T, Comparator>::stergePrima(node<T>* root, T delKey)
 {
-	if (root == NULL) return root;
+	if (noOfAparitions(root, delKey) == 0)
+		throw nuExista();
+	if (root == NULL) throw multisetVid();
 	if (delKey < root->key)
 		root->left = stergePrima(root->left, delKey);
 	else if (delKey > root->key)
@@ -302,10 +319,10 @@ ostream& operator<< <>(ostream& out, multiset<T, Comparator>& M)
 	while (coada.size() > 0)
 	{
 		aux = coada[0];
-		if(aux->getLeft()!= NULL) coada.push_back(aux->getLeft());
-		if(aux->getRight()!=NULL) coada.push_back(aux->getRight());
+		if (aux->getLeft() != NULL) coada.push_back(aux->getLeft());
+		if (aux->getRight() != NULL) coada.push_back(aux->getRight());
 		int i = 0;
-		while (aux->getAparitions()>i)
+		while (aux->getAparitions() > i)
 		{
 			i++;
 			out << aux->getKey();
