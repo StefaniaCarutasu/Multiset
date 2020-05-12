@@ -8,7 +8,8 @@ template<typename T> class node
 {
 	T key;
 	node<T>* left, * right;
-	int height, aparitions; //inaltimea arborelui pana la nodul curent
+	int height; //inaltimea arborelui pana la nodul curent
+	int aparitions; //pastrez nr de aparitii a unei chei ca sa pot pastra structura de BST
 public:
 	node() : left(NULL), right(NULL), height(0), aparitions(0) {}
 	node(T key) : key(key), left(NULL), right(NULL), height(0), aparitions(1) {}

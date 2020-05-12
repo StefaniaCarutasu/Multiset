@@ -140,26 +140,22 @@ inline node<T>* multiset<T, Comparator>::inserare(node<T>* root, T newKey)
 	//initial facem o insertie normala in BST
 	if (root == NULL)
 	{
-		//incrementNodes(1);
-		node<T>* aux = new node<T>;
-		aux->key = newKey;
-		aux->aparitions = 1;
+		node<T>* aux = new node<T>(newKey);
 		root = aux;
 		return root;
 	}
 	else
 	{
-		if (comp(newKey , root->key) == -1)
+		if (comp(newKey, root->key) == 0)
+			root->aparitions++;	//daca cheia ce trebuie inserata mai apare in multiset atunci doar incrementez nr de aparitii
+		else if (comp(newKey , root->key) == -1)
 			root->left = inserare(root->left, newKey);
 		else if (comp(newKey , root->key) == 1)
 			root->right = inserare(root->right, newKey);
-		else
-		{
-			root->aparitions++;
-			return root;
-		}
 	}
+
 	root->height = 1 + maxim(root->left->getHeight(root->left), root->right->getHeight(root->right));
+
 	//verificam daca cumva arborele nu mai este echilibrat si verificam care dintre cele 4 cazuri de dezechilibru sunt
 	int balance = getBalance(root);
 
@@ -197,6 +193,7 @@ inline node<T>* multiset<T, Comparator>::stergePrima(node<T>* root, T delKey)
 	if (noOfAparitions(root, delKey) == 0)
 		throw nuExista();
 	if (root == NULL) throw multisetVid();
+	//initial fac o stergere clasica dintr-un BST
 	if (delKey < root->key)
 		root->left = stergePrima(root->left, delKey);
 	else if (delKey > root->key)
@@ -330,5 +327,6 @@ ostream& operator<< <>(ostream& out, multiset<T, Comparator>& M)
 		}
 		coada.erase(coada.begin());
 	}
+	out << '\n';
 	return out;
 }
