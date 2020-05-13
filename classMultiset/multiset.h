@@ -31,6 +31,7 @@ public:
 	bool exista(T);
 	void stergereToate(T);
 	int distincte(node<T>*);
+	void operator = (multiset<T, Comparator>&);
 	friend ostream& operator << <>(ostream&, multiset<T, Comparator>&);
 
 };
@@ -57,31 +58,43 @@ multiset<T, Comparator>::multiset(): root(NULL), noOfNodes(0) {}
 template<class T, class Comparator>
 multiset<T, Comparator>::multiset(multiset& M)
 {
-	if (noOfNodes > 0)
-		~multiset();
+	if (this->noOfNodes)
+		this->~multiset();
 	vector<node<T>*> coada;
 	coada.push_back(M.root);
-	while (coada.size > 0)
+	while (coada.size() > 0)
 	{
 		node<T>* aux = coada[0];
-		coada.push_back(aux->left);
-		coada.push_back(aux->right);
+		if (aux->getLeft() != NULL) coada.push_back(aux->getLeft());
+		if (aux->getRight() != NULL) coada.push_back(aux->getRight());
 		int i = 0;
 		while (i < aux->aparitions)
 		{
-			this->root = this->inserare(root, aux->key);
+			this->setRoot(this->inserare(this->getRoot(), aux->getKey()));
 			i++;
 		}
 		coada.erase(coada.begin());
 	}
+
 
 }
 //destructor
 template<typename T, typename Comparator>
 multiset<T, Comparator>::~multiset()
 {
-	while (noOfNodes)
-		stergereToate(root->key);
+	vector<node<T>*> coada;
+	vector<T> auxSterg;
+	coada.push_back(this->root);
+	while (coada.size() > 0)
+	{
+		node<T>* aux = coada[0];
+		auxSterg.push_back(aux->getKey());
+		if (aux->getLeft() != NULL) coada.push_back(aux->getLeft());
+		if (aux->getRight() != NULL) coada.push_back(aux->getRight());
+		coada.erase(coada.begin());	
+	}
+	for (auto i : auxSterg)
+		this->stergereToate(i);
 }
 
 //functii auxiliare pentru a realiza insertia si deletia
@@ -142,6 +155,7 @@ inline node<T>* multiset<T, Comparator>::inserare(node<T>* root, T newKey)
 	{
 		node<T>* aux = new node<T>(newKey);
 		root = aux;
+		this->noOfNodes++;
 		return root;
 	}
 	else
@@ -201,6 +215,7 @@ inline node<T>* multiset<T, Comparator>::stergePrima(node<T>* root, T delKey)
 	else
 	{
 		root->aparitions--;
+		this->noOfNodes--;
 		if (root->aparitions == 0)
 		{
 			if (root->left == NULL)
@@ -257,17 +272,33 @@ inline int multiset<T, Comparator>::noOfAparitions(node<T>* root, T findKey)
 {
 	if (root == NULL)
 		return 0;
-	if (comp(root->key, findKey) == 0)
-		return root->aparitions;
-	else if (comp(root->key, findKey) < 0)
-		return noOfAparitions(root->left, findKey);
-	else return noOfAparitions(root->right, findKey);
+	else
+	{
+		vector<node<T>*> coada;
+		coada.push_back(root);
+		node<T>* aux;
+		while (coada.size() > 0)
+		{
+			aux = coada[0];
+			if (comp(aux->getKey(), findKey) == 0)
+				return aux->getAparitions();
+			else
+			{
+				if (aux->getLeft() != NULL) coada.push_back(aux->getLeft());
+				if (aux->getRight() != NULL) coada.push_back(aux->getRight());
+				coada.erase(coada.begin());
+			}
+			
+		}
+		if (coada.size() == 0)
+			return 0;
+	}
 }
 
 template<typename T, typename Comparator>
 inline bool multiset<T, Comparator>::exista(T findKey)
 {
-	int nrAparitii = noOfAparitions(findKey);
+	int nrAparitii = noOfAparitions(this->root, findKey);
 	if (nrAparitii)
 		return true;
 	return false;
@@ -306,10 +337,36 @@ inline int multiset<T, Comparator>::distincte(node<T>* root)
 	return nrNoduri;
 }
 
+template<typename T, typename Comparator>
+inline void multiset<T, Comparator>::operator = (multiset<T, Comparator>& M)
+{
+
+	if (this->getNoOfNodes())
+		this->~multiset();
+	vector<node<T>*> coada;
+	coada.push_back(M.root);
+	while (coada.size() > 0)
+	{
+		node<T>* aux = coada[0];
+		if (aux->getLeft() != NULL) coada.push_back(aux->getLeft());
+		if (aux->getRight() != NULL) coada.push_back(aux->getRight());
+		int i = 0;
+		while (i < aux->aparitions)
+		{
+			this->setRoot(this->inserare(this->getRoot(), aux->getKey()));
+			i++;
+		}
+		coada.erase(coada.begin());
+	}
+
+}
+
 
 template<typename T, typename Comparator>
 ostream& operator<< <>(ostream& out, multiset<T, Comparator>& M)
 {
+	if (M.getRoot() == NULL)
+		throw multisetVid();
 	vector<node<T>*> coada;
 	coada.push_back(M.root);
 	node<T>* aux;

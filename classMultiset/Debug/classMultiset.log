@@ -1,2 +1,3 @@
 ﻿  classMultiset.cpp
+C:\Facultate\Multiset\classMultiset\multiset.h(296): warning C4715: 'multiset<int,Comparator<int> >::noOfAparitions': not all control paths return a value
   classMultiset.vcxproj -> C:\Facultate\Multiset\classMultiset\Debug\classMultiset.exe
