@@ -161,7 +161,10 @@ inline node<T>* multiset<T, Comparator>::inserare(node<T>* root, T newKey)
 	else
 	{
 		if (comp(newKey, root->key) == 0)
-			root->aparitions++;	//daca cheia ce trebuie inserata mai apare in multiset atunci doar incrementez nr de aparitii
+		{
+			root->aparitions++; //daca cheia ce trebuie inserata mai apare in multiset atunci doar incrementez nr de aparitii
+			noOfNodes++;
+		}
 		else if (comp(newKey , root->key) == -1)
 			root->left = inserare(root->left, newKey);
 		else if (comp(newKey , root->key) == 1)
