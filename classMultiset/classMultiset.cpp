@@ -20,10 +20,13 @@ void testeMultiset()
 	assert(n.distincte(n.getRoot()) == 6);
 	n.setRoot(n.inserare(n.getRoot(), 8));
 	assert(n.noOfAparitions(n.getRoot(), 8) == 2);
+
 	multiset<double, Comparator<double>> p;
 	p.setRoot(p.inserare(p.getRoot(), 2.7));
 	p.setRoot(p.inserare(p.getRoot(), 3.7));
-	assert(p.getNoOfNodes() == 2);
+	assert(p.distincte(p.getRoot()) == 2);
+	p.stergePrima(p.getRoot(), 2.7);
+	assert(p.distincte(p.getRoot()) == 1);
 }
 
 

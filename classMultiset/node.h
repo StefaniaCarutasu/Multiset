@@ -2,10 +2,11 @@
 #include<iostream>
 using namespace std;
 
-//pentru a atinge complexitatea ceruta voi folosi un  AVL
+
 template<typename T, typename Comparator> class multiset;
 template<typename T> class node
 {
+	//pentru a atinge complexitatea ceruta voi folosi un  AVL
 	T key;
 	node<T>* left, * right;
 	int height; //inaltimea arborelui pana la nodul curent

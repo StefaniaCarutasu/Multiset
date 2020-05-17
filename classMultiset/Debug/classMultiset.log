@@ -9,12 +9,27 @@ C:\Facultate\Multiset\classMultiset\multiset.h(152): message : while compiling c
           [
               T=double
           ]
-C:\Facultate\Multiset\classMultiset\classMultiset.cpp(24): message : see reference to function template instantiation 'node<T> *multiset<T,Comparator<double>>::inserare(node<T> *,T)' being compiled
+C:\Facultate\Multiset\classMultiset\classMultiset.cpp(25): message : see reference to function template instantiation 'node<T> *multiset<T,Comparator<double>>::inserare(node<T> *,T)' being compiled
           with
           [
               T=double
           ]
-C:\Facultate\Multiset\classMultiset\classMultiset.cpp(23): message : see reference to class template instantiation 'multiset<double,Comparator<double>>' being compiled
+C:\Facultate\Multiset\classMultiset\classMultiset.cpp(24): message : see reference to class template instantiation 'multiset<double,Comparator<double>>' being compiled
+C:\Facultate\Multiset\classMultiset\multiset.h(244,19): warning C4244: '=': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=double
+          ]
+C:\Facultate\Multiset\classMultiset\multiset.h(209): message : while compiling class template member function 'node<T> *multiset<T,Comparator<double>>::stergePrima(node<T> *,T)'
+          with
+          [
+              T=double
+          ]
+C:\Facultate\Multiset\classMultiset\classMultiset.cpp(28): message : see reference to function template instantiation 'node<T> *multiset<T,Comparator<double>>::stergePrima(node<T> *,T)' being compiled
+          with
+          [
+              T=double
+          ]
 C:\Facultate\Multiset\classMultiset\multiset.h(117,90): warning C4244: '=': conversion from 'T' to 'int', possible loss of data
           with
           [
@@ -31,7 +46,7 @@ C:\Facultate\Multiset\classMultiset\multiset.h(181): message : see reference to 
               T=double
           ]
 C:\Facultate\Multiset\classMultiset\multiset.h(56): message : while compiling class template member function 'multiset<double,Comparator<double>>::multiset(void)'
-C:\Facultate\Multiset\classMultiset\classMultiset.cpp(23): message : see reference to function template instantiation 'multiset<double,Comparator<double>>::multiset(void)' being compiled
+C:\Facultate\Multiset\classMultiset\classMultiset.cpp(24): message : see reference to function template instantiation 'multiset<double,Comparator<double>>::multiset(void)' being compiled
 C:\Facultate\Multiset\classMultiset\multiset.h(118,110): warning C4244: '=': conversion from 'T' to 'int', possible loss of data
           with
           [
@@ -53,31 +68,6 @@ C:\Facultate\Multiset\classMultiset\multiset.h(185): message : see reference to 
               T=double
           ]
 C:\Facultate\Multiset\classMultiset\multiset.h(130,115): warning C4244: '=': conversion from 'T' to 'int', possible loss of data
-          with
-          [
-              T=double
-          ]
-C:\Facultate\Multiset\classMultiset\multiset.h(243,19): warning C4244: '=': conversion from 'T' to 'int', possible loss of data
-          with
-          [
-              T=double
-          ]
-C:\Facultate\Multiset\classMultiset\multiset.h(209): message : while compiling class template member function 'node<T> *multiset<T,Comparator<double>>::stergePrima(node<T> *,T)'
-          with
-          [
-              T=double
-          ]
-C:\Facultate\Multiset\classMultiset\multiset.h(315): message : see reference to function template instantiation 'node<T> *multiset<T,Comparator<double>>::stergePrima(node<T> *,T)' being compiled
-          with
-          [
-              T=double
-          ]
-C:\Facultate\Multiset\classMultiset\multiset.h(104): message : while compiling class template member function 'T multiset<T,Comparator<double>>::maxim(T,T)'
-          with
-          [
-              T=double
-          ]
-C:\Facultate\Multiset\classMultiset\multiset.h(174): message : see reference to function template instantiation 'T multiset<T,Comparator<double>>::maxim(T,T)' being compiled
           with
           [
               T=double

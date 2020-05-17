@@ -12,22 +12,22 @@ template<typename T, typename Comparator> class multiset
 	Comparator comp;
 protected:
 	//metode ce ma vor ajuta la realizarea insertiei si deletiei
-	T maxim(T, T);	//facut
-	node<T>* rotateRight(node<T>*);	//facut
-	node<T>* rotateLeft(node<T>*);	//facut
-	int getBalance(node<T>*);	//facut	
-	node<T>* valMinNod(node<T>*);	//facut
+	T maxim(T, T);
+	node<T>* rotateRight(node<T>*);
+	node<T>* rotateLeft(node<T>*);
+	int getBalance(node<T>*);
+	node<T>* valMinNod(node<T>*);
 
 public:
-	multiset();	//facut
+	multiset();	
 	multiset(multiset&);
 	~multiset();
 	void setRoot(node<T>* r) { this->root = r; }
 	node<T>* getRoot() const { return this->root; }
 	int getNoOfNodes() const { return this->noOfNodes; }
 	node<T>* inserare(node<T>*, T);	
-	node<T>* stergePrima(node<T>*, T);	//facut?
-	int noOfAparitions(node<T>*, T);	//facut
+	node<T>* stergePrima(node<T>*, T);
+	int noOfAparitions(node<T>*, T);
 	bool exista(T);
 	void stergereToate(T);
 	int distincte(node<T>*);
@@ -199,7 +199,7 @@ inline node<T>* multiset<T, Comparator>::inserare(node<T>* root, T newKey)
 	}
 
 	//daca nu este niciunul dintre cele 4 cazuri de mai sus
-	//avl-ul este echilibrat deja si intoarcem doar nodul
+	//avl-ul este echilibrat deja si intoarcem radacina
 	
 	return root;
 }
@@ -207,9 +207,10 @@ inline node<T>* multiset<T, Comparator>::inserare(node<T>* root, T newKey)
 template<typename T, typename Comparator>
 inline node<T>* multiset<T, Comparator>::stergePrima(node<T>* root, T delKey)
 {
-	if (noOfAparitions(root, delKey) == 0)
-		throw nuExista();
+	//verific daca valoarea exista deja in multiset sau daca multisetul este vid
 	if (root == NULL) throw multisetVid();
+	if (noOfAparitions(root, delKey) == 0) throw nuExista();
+	
 	//initial fac o stergere clasica dintr-un BST
 	if (delKey < root->key)
 		root->left = stergePrima(root->left, delKey);
@@ -273,8 +274,7 @@ inline node<T>* multiset<T, Comparator>::stergePrima(node<T>* root, T delKey)
 template<typename T, typename Comparator>
 inline int multiset<T, Comparator>::noOfAparitions(node<T>* root, T findKey)
 {
-	if (root == NULL)
-		return 0;
+	if (root == NULL) return 0;
 	else
 	{
 		vector<node<T>*> coada;
@@ -319,25 +319,8 @@ inline void multiset<T, Comparator>::stergereToate(T deleteKey)
 template<typename T, typename Comparator>
 inline int multiset<T, Comparator>::distincte(node<T>* root)
 {
-	vector<node<T>*> coada;
-	coada.push_back(this->root);
-	int nrNoduri = 1;
-	while (coada.size()> 0)
-	{
-		node<T>* aux = coada[0];
-		if (aux->left != NULL)
-		{
-			nrNoduri++;
-			coada.push_back(aux->left);
-		}
-		if (aux->right != NULL)
-		{
-			nrNoduri++;
-			coada.push_back(aux->right);
-		}
-		coada.erase(coada.begin());
-	}
-	return nrNoduri;
+	//avand in vedere ca pt fiecare nod pastrez numarul de aparitii in multiset numarul de noduri din avl imi va da nr de valori distincte
+	return noOfNodes;	
 }
 
 template<typename T, typename Comparator>
