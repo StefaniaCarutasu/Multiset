@@ -225,13 +225,13 @@ inline node<T>* multiset<T, Comparator>::stergePrima(node<T>* root, T delKey)
 			if (root->left == NULL)
 			{
 				node<T>* aux = root->right;
-				free(root);
+				delete root;
 				return aux;
 			}
 			else if (root == NULL)
 			{
 				node<T>* aux = root->left;
-				free(root);
+				delete root;
 				return root;
 			}
 			node<T>* aux = valMinNod(root->right);
